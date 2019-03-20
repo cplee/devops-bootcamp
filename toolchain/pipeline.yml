@@ -102,6 +102,8 @@ Resources:
             Provider: CodeBuild
           InputArtifacts:
           - Name: SourceOutput
+          OutputArtifacts:
+          - Name: ImageOutput
           Configuration:
             ProjectName: !Ref CodeBuildImage
           RunOrder: 1
@@ -175,6 +177,12 @@ Resources:
               - "ecr:InitiateLayerUpload"
               - "ecr:UploadLayerPart"
               - "ecr:CompleteLayerUpload"
+              - "ecr:DescribeRepositories"
+          - Effect: Allow
+            Resource: 
+            - '*'
+            Action: 
+              - "ecr:GetAuthorizationToken"
       - PolicyName: codepipeline-integration
         PolicyDocument:
           Statement:

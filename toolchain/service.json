@@ -1,0 +1,27 @@
+{
+    "cluster": "${EcsClusterName}",
+    "serviceName": "${ServiceName}",
+    "taskDefinition": "${TaskDefinitionArn}",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "${BlueTargetGroupArn}",
+            "containerName": "${ApplicationName}",
+            "containerPort": 4000
+        }
+    ],
+    "launchType": "FARGATE",
+    "schedulingStrategy": "REPLICA",
+    "deploymentController": {
+        "type": "CODE_DEPLOY"
+    },
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+       "awsvpcConfiguration": {
+          "assignPublicIp": "DISABLED",
+          "securityGroups": [ "${SecurityGroupId}" ],
+          "subnets": [ "${SubnetIdOne}", "${SubnetIdTwo}" ]
+       }
+    },
+    "desiredCount": 1
+}
+

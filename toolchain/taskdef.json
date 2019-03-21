@@ -1,0 +1,22 @@
+{
+    "executionRoleArn": "arn:aws:iam::281127131043:role/devops-bootcamp-infrastructur-ECSTaskExecutionRole-LFIAZJZO88BZ",
+    "containerDefinitions": [
+        {
+            "name": "devops-bootcamp",
+            "image": "<IMAGE1_NAME>",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 4000
+                }
+            ]
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512",
+    "family": "devops-bootcamp"
+}

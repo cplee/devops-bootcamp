@@ -124,17 +124,16 @@ Resources:
             Version: '1'
             Provider: CodeDeployToECS
           InputArtifacts:
-          - Name: SourceOutput
           - Name: ImageOutput
           Configuration:
             ApplicationName: !Ref ApplicationName
             DeploymentGroupName: !Ref DeploymentGroupName
             Image1ArtifactName: ImageOutput
             Image1ContainerName: IMAGE1_NAME
-            AppSpecTemplateArtifact: SourceOutput
-            AppSpecTemplatePath: toolchain/appspec.yml
-            TaskDefinitionTemplateArtifact: SourceOutput
-            TaskDefinitionTemplatePath: toolchain/taskdef.json
+            AppSpecTemplateArtifact: ImageOutput
+            AppSpecTemplatePath: appspec.yml
+            TaskDefinitionTemplateArtifact: ImageOutput
+            TaskDefinitionTemplatePath: taskdef.json
           RunOrder: 2
   CloudFormationRole:
     Type: AWS::IAM::Role

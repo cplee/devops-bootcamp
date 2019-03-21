@@ -65,6 +65,8 @@ Resources:
         EnvironmentVariables:
           - Name: REPOSITORY_NAME
             Value: !Ref ImageRepo
+          - Name: CONTAINER_NAME
+            Value: !Ref ApplicationName
       Source:
         Type: CODEPIPELINE
         BuildSpec: toolchain/buildspec.yml
@@ -128,7 +130,7 @@ Resources:
             ApplicationName: !Ref ApplicationName
             DeploymentGroupName: !Ref DeploymentGroupName
             Image1ArtifactName: ImageOutput
-            Image1ContainerName: !Ref ImageRepo
+            Image1ContainerName: IMAGE1_NAME
             AppSpecTemplateArtifact: SourceOutput
             AppSpecTemplatePath: toolchain/appspec.yml
             TaskDefinitionTemplateArtifact: SourceOutput
@@ -290,6 +292,18 @@ Resources:
             Resource: 
             - !Sub arn:aws:s3:::${PipelineBucket}
             Effect: Allow
+      - PolicyName: codedeploy-service
+        PolicyDocument:
+          Statement:
+            - Action:
+              - codedeploy:CreateDeployment
+              - codedeploy:GetApplication
+              - codedeploy:GetApplicationRevision
+              - codedeploy:GetDeployment
+              - codedeploy:GetDeploymentConfig
+              - codedeploy:RegisterApplicationRevision
+              Resource: '*'
+              Effect: Allow
       - PolicyName: cloudformation-service
         PolicyDocument:
           Statement:

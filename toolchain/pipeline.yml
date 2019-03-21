@@ -93,7 +93,7 @@ Resources:
             Version: '1'
             Provider: GitHub
           OutputArtifacts:
-          - Name: SourceOutput
+          - Name: SourceArtifact
           Configuration:
             Owner: !Ref GitHubUser
             Repo: !Ref GitHubRepo
@@ -109,9 +109,10 @@ Resources:
             Version: '1'
             Provider: CodeBuild
           InputArtifacts:
-          - Name: SourceOutput
+          - Name: SourceArtifact
           OutputArtifacts:
-          - Name: ImageOutput
+          - Name: DefinitionArtifact
+          - Name: ImageArtifact
           Configuration:
             ProjectName: !Ref CodeBuildImage
           RunOrder: 1
@@ -124,15 +125,16 @@ Resources:
             Version: '1'
             Provider: CodeDeployToECS
           InputArtifacts:
-          - Name: ImageOutput
+          - Name: DefinitionArtifact
+          - Name: ImageArtifact
           Configuration:
             ApplicationName: !Ref ApplicationName
             DeploymentGroupName: !Ref DeploymentGroupName
-            Image1ArtifactName: ImageOutput
+            Image1ArtifactName: ImageArtifact
             Image1ContainerName: IMAGE1_NAME
-            AppSpecTemplateArtifact: ImageOutput
-            AppSpecTemplatePath: appspec.yml
-            TaskDefinitionTemplateArtifact: ImageOutput
+            AppSpecTemplateArtifact: DefinitionArtifact
+            AppSpecTemplatePath: appspec.yaml
+            TaskDefinitionTemplateArtifact: DefinitionArtifact
             TaskDefinitionTemplatePath: taskdef.json
           RunOrder: 2
   CloudFormationRole:
@@ -301,8 +303,16 @@ Resources:
               - codedeploy:GetDeployment
               - codedeploy:GetDeploymentConfig
               - codedeploy:RegisterApplicationRevision
+              - 'ecs:*'
               Resource: '*'
               Effect: Allow
+            - Action:
+              - iam:PassRole
+              Resource: '*'
+              Effect: Allow
+              Condition:
+                StringEqualsIfExists:
+                    iam:PassedToService: ecs-tasks.amazonaws.com
       - PolicyName: cloudformation-service
         PolicyDocument:
           Statement:

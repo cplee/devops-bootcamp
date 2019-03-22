@@ -226,6 +226,21 @@ Resources:
         - !Ref PublicSubnetOne
         - !Ref PublicSubnetTwo
       SecurityGroups: [!Ref 'PublicLoadBalancerSG']
+  
+  LoadBalancerErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      MetricName: "HTTPCode_ELB_5XX_Count"
+      Namespace: "AWS/ApplicationELB"
+      Statistic: "Sum"
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 5.0
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
 
   BlueLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -372,7 +387,7 @@ Resources:
         - Name: !Ref Application
           Image: 'alpine:latest'
           PortMappings:
-            - ContainerPort: 4000
+            - ContainerPort: 3000
   Application:
     Type: AWS::CodeDeploy::Application
     Properties:
@@ -472,3 +487,5 @@ Outputs:
     Value: !Ref Application
   ServiceRoleArn:
     Value: !GetAtt CodeDeployRole.Arn
+  LoadBalancerErrorAlarmName:
+    Value: !Ref LoadBalancerErrorAlarm

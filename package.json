@@ -1,0 +1,25 @@
+{
+  "name": "devops-bootcamp",
+  "version": "1.0.0",
+  "description": "![liatrio](docs/img/Liatrio-icon.png) # Liatrio's DevOps Bootcamp",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cplee/devops-bootcamp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cplee/devops-bootcamp/issues"
+  },
+  "homepage": "https://github.com/cplee/devops-bootcamp#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

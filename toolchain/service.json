@@ -6,7 +6,7 @@
         {
             "targetGroupArn": "${BlueTargetGroupArn}",
             "containerName": "${ApplicationName}",
-            "containerPort": 4000
+            "containerPort": 3000
         }
     ],
     "launchType": "FARGATE",

@@ -227,20 +227,6 @@ Resources:
         - !Ref PublicSubnetTwo
       SecurityGroups: [!Ref 'PublicLoadBalancerSG']
   
-  LoadBalancerErrorAlarm:
-    Type: AWS::CloudWatch::Alarm
-    Properties:
-      MetricName: "HTTPCode_ELB_5XX_Count"
-      Namespace: "AWS/ApplicationELB"
-      Statistic: "Sum"
-      Dimensions:
-        - Name: LoadBalancer
-          Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
-      Period: 60
-      EvaluationPeriods: 1
-      Threshold: 5.0
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
 
   BlueLoadBalancerListener:
     Type: AWS::ElasticLoadBalancingV2::Listener
@@ -293,6 +279,40 @@ Resources:
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
       TargetType: ip
+
+  BlueResponseTimeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      MetricName: "TargetResponseTime"
+      Namespace: "AWS/ApplicationELB"
+      ExtendedStatistic: "p95"
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt BlueTargetGroup.TargetGroupFullName
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1000 
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+  GreenResponseTimeAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      MetricName: "TargetResponseTime"
+      Namespace: "AWS/ApplicationELB"
+      ExtendedStatistic: "p95"
+      Dimensions:
+        - Name: LoadBalancer
+          Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
+        - Name: TargetGroup
+          Value: !GetAtt GreenTargetGroup.TargetGroupFullName
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1000 
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
 
   ElbDns:
     Type: AWS::Route53::RecordSetGroup
@@ -487,5 +507,7 @@ Outputs:
     Value: !Ref Application
   ServiceRoleArn:
     Value: !GetAtt CodeDeployRole.Arn
-  LoadBalancerErrorAlarmName:
-    Value: !Ref LoadBalancerErrorAlarm
+  GreenResponseTimeAlarmName:
+    Value: !Ref GreenResponseTimeAlarm
+  BlueResponseTimeAlarmName:
+    Value: !Ref BlueResponseTimeAlarm

@@ -1,4 +1,16 @@
 {
+    "alarmConfiguration": {
+        "alarms": [
+            {
+                "name": "${BlueAlarmName}"
+            },
+            {
+                "name": "${GreenAlarmName}"
+            }
+        ],
+        "enabled": true,
+        "ignorePollAlarmFailure": false
+    },
     "applicationName": "${ApplicationName}",
     "autoRollbackConfiguration": {
        "enabled": true,

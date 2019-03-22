@@ -441,6 +441,10 @@ Resources:
                 - 's3:GetObjectMetadata'
                 - 's3:GetObjectVersion'
               Resource: '*'
+            - Effect: Allow
+              Action:
+                - 'iam:PassRole'
+              Resource: !GetAtt ECSTaskExecutionRole.Arn
 Outputs:
   EcsClusterName:
     Value: !Ref ECSCluster
@@ -448,10 +452,14 @@ Outputs:
     Value: !Ref TaskDefinition
   BlueTargetGroupArn:
     Value: !Ref BlueTargetGroup
+  BlueTargetGroupName:
+    Value: !GetAtt BlueTargetGroup.TargetGroupName
   BlueListenerArn:
     Value: !Ref BlueLoadBalancerListener
   GreenTargetGroupArn:
     Value: !Ref GreenTargetGroup
+  GreenTargetGroupName:
+    Value: !GetAtt GreenTargetGroup.TargetGroupName
   GreenListenerArn:
     Value: !Ref GreenLoadBalancerListener
   SecurityGroupId:

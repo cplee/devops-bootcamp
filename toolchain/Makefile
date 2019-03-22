@@ -25,7 +25,7 @@ infrastructure_outputs:
 	$(eval INFRASTRUCTURE_OUTPUTS+=ServiceName=$(PREFIX)-service)
 	$(eval INFRASTRUCTURE_OUTPUTS+=DeploymentGroupName=$(PREFIX)-service)
 
-service: infrastructure infrastructure_outputs
+service: infrastructure_outputs
 	@env $(INFRASTRUCTURE_OUTPUTS) envsubst < service.json > service.json.out
 	@env $(INFRASTRUCTURE_OUTPUTS) envsubst < deployment-group.json > deployment-group.json.out
 	@-aws ecs create-service --cli-input-json file://service.json.out

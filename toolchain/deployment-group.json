@@ -24,10 +24,10 @@
          {
            "targetGroups": [
               {
-                  "name": "${BlueTargetGroupArn}"
+                  "name": "${BlueTargetGroupName}"
               },
               {
-                  "name": "${GreenTargetGroupArn}"
+                  "name": "${GreenTargetGroupName}"
               }
            ],
            "prodTrafficRoute": {

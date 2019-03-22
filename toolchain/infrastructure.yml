@@ -265,6 +265,9 @@ Resources:
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
       TargetType: ip
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 0
 
   GreenTargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -279,6 +282,10 @@ Resources:
       UnhealthyThresholdCount: 2
       VpcId: !Ref 'VPC'
       TargetType: ip
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 0
+
 
   BlueResponseTimeAlarm:
     Type: AWS::CloudWatch::Alarm

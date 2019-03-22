@@ -11,6 +11,12 @@
                     "protocol": "tcp",
                     "containerPort": 3000
                 }
+            ],
+            "environment": [
+                {
+                    "name": "DELAY",
+                    "value": "500"
+                }
             ]
         }
     ],

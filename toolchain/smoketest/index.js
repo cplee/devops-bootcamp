@@ -1,4 +1,5 @@
 'use strict';
+var request = require('request');
 
 const aws = require('aws-sdk');
 const codedeploy = new aws.CodeDeploy({apiVersion: '2014-10-06'});
@@ -10,19 +11,20 @@ exports.handler = (event, context, callback) => {
     };
 
     // perform smoke testing
-    request(`${process.env.ENDPOINT}/README.md`, function (error, response, body) {
+    console.log(`Loading ${process.env.URL}`)
+    request(process.env.URL, function (error, response, body) {
         if (error) {
             resultParams.status =  'Failed';
-            console.console.error(`Error occured: ${e}`)
-        } else if (response.statusCode != 200) {
+            console.error(`Error occured: ${error}`)
+        } else if (response.statusCode != process.env.STATUS) {
             resultParams.status =  'Failed';
-            console.console.error(`Unsuccessful HTTP status: ${response.statusCode}`)
-        } else if (body.indexOf("![Liatrio](img/Liatrio-icon.png)") == -1) {
+            console.error(`Unsuccessful HTTP status: ${response.statusCode} != ${process.env.STATUS}`)
+        } else if (body.indexOf(process.env.BODY) == -1) {
             resultParams.status =  'Failed';
-            console.console.error(`Body is missing logo`)
+            console.error(`Body is missing '${process.env.BODY}'`)
         } else {
             resultParams.status =  'Succeeded';
         }
-        codedeploy.putLifecycleEventHookExecutionStatus(params, callback);
+        codedeploy.putLifecycleEventHookExecutionStatus(resultParams, callback);
       });
 };

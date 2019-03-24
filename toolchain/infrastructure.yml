@@ -482,6 +482,12 @@ Resources:
               Resource: '*'
             - Effect: Allow
               Action:
+                - 'lambda:InvokeFunction'
+              Resource: 
+              - !GetAtt SmokeTestFunction.Arn
+              - !GetAtt SyntheticTestFunction.Arn
+            - Effect: Allow
+              Action:
                 - 'iam:PassRole'
               Resource: !GetAtt ECSTaskExecutionRole.Arn
   SmokeTestFunction:
@@ -491,9 +497,19 @@ Resources:
       Runtime: nodejs8.10
       Handler: index.handler
       CodeUri: smoketest
+      Timeout: 15 
       Environment:
         Variables:
-          ENDPOINT: !Sub http://bootcamp.${HostedZoneName}:8080/
+          URL: !Sub http://bootcamp.${HostedZoneName}:8080/README.md
+          STATUS: '200'
+          BODY: '![Liatrio](img/Liatrio-icon.png)'
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - codedeploy:PutLifecycleEventHookExecutionStatus
+            Resource: !Sub arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${Prefix}/${Prefix}-service
   SyntheticTestFunction:
     Type: 'AWS::Serverless::Function'
     Properties:
@@ -501,9 +517,20 @@ Resources:
       Runtime: nodejs8.10
       Handler: index.handler
       CodeUri: synthetictest
+      Timeout: 300
       Environment:
         Variables:
-          ENDPOINT: !Sub http://bootcamp.${HostedZoneName}:80/
+          URL: !Sub http://bootcamp.${HostedZoneName}:80/
+          CONCURRENCY: 5
+          MAX_SECONDS: 180
+          REQUESTS_PER_SECOND: 10
+      Policies:
+      - Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - codedeploy:PutLifecycleEventHookExecutionStatus
+            Resource: !Sub arn:aws:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${Prefix}/${Prefix}-service
 Outputs:
   EcsClusterName:
     Value: !Ref ECSCluster

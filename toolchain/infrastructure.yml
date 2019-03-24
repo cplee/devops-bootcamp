@@ -287,7 +287,7 @@ Resources:
           Value: 0
 
 
-  BlueResponseTimeAlarm:
+  LoadBalancerResponseTimeAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       MetricName: "TargetResponseTime"
@@ -296,28 +296,24 @@ Resources:
       Dimensions:
         - Name: LoadBalancer
           Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
-        - Name: TargetGroup
-          Value: !GetAtt BlueTargetGroup.TargetGroupFullName
       Period: 60
       EvaluationPeriods: 1
-      Threshold: 1000 
+      Threshold: 1 
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
 
-  GreenResponseTimeAlarm:
+  LoadBalancerErrorAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      MetricName: "TargetResponseTime"
+      MetricName: "HTTPCode_ELB_4XX_Count"
       Namespace: "AWS/ApplicationELB"
-      ExtendedStatistic: "p95"
+      Statistic: "Sum"
       Dimensions:
         - Name: LoadBalancer
           Value: !GetAtt PublicLoadBalancer.LoadBalancerFullName
-        - Name: TargetGroup
-          Value: !GetAtt GreenTargetGroup.TargetGroupFullName
       Period: 60
       EvaluationPeriods: 1
-      Threshold: 1000 
+      Threshold: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
       TreatMissingData: notBreaching
 
@@ -514,7 +510,7 @@ Outputs:
     Value: !Ref Application
   ServiceRoleArn:
     Value: !GetAtt CodeDeployRole.Arn
-  GreenResponseTimeAlarmName:
-    Value: !Ref GreenResponseTimeAlarm
-  BlueResponseTimeAlarmName:
-    Value: !Ref BlueResponseTimeAlarm
+  LoadBalancerResponseTimeAlarmName:
+    Value: !Ref LoadBalancerResponseTimeAlarm
+  LoadBalancerErrorAlarmName:
+    Value: !Ref LoadBalancerErrorAlarm

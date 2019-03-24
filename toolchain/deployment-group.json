@@ -2,10 +2,10 @@
     "alarmConfiguration": {
         "alarms": [
             {
-                "name": "${BlueResponseTimeAlarmName}"
+                "name": "${LoadBalancerResponseTimeAlarmName}"
             },
             {
-                "name": "${GreenResponseTimeAlarmName}"
+                "name": "${LoadBalancerErrorAlarmName}"
             }
         ],
         "enabled": true,

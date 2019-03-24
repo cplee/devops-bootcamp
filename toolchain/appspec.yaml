@@ -7,3 +7,6 @@ Resources:
         LoadBalancerInfo:
           ContainerName: "devops-bootcamp"
           ContainerPort: 3000
+Hooks:
+ - AfterAllowTestTraffic: DevopsBootcampSmokeTest
+ - AfterAllowTraffic: DevopsBootcampSyntheticTest

@@ -14,8 +14,18 @@ check:
 	@aws cloudformation validate-template --template-body file://pipeline.yml
 
 infrastructure: check
-	@aws cloudformation deploy \
+	@-aws s3 mb s3://$(PREFIX)-lambda
+
+	@cd smoketest && npm install
+	@cd synthetictest && npm install
+
+	@aws cloudformation package \
+		--s3-bucket $(PREFIX)-lambda \
 		--template-file infrastructure.yml \
+		--output-template-file infrastructure.yml.out
+
+	@aws cloudformation deploy \
+		--template-file infrastructure.yml.out \
 		--stack-name $(INFRASTRUCTURE_STACK_NAME) \
         --capabilities CAPABILITY_NAMED_IAM \
 		--parameter-overrides Prefix=$(PREFIX)

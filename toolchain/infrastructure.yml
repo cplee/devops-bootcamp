@@ -305,7 +305,7 @@ Resources:
   LoadBalancerErrorAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
-      MetricName: "HTTPCode_ELB_4XX_Count"
+      MetricName: "HTTPCode_Target_5XX_Count"
       Namespace: "AWS/ApplicationELB"
       Statistic: "Sum"
       Dimensions:

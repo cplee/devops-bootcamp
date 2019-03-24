@@ -15,7 +15,7 @@
             "environment": [
                 {
                     "name": "DELAY",
-                    "value": "50"
+                    "value": "1500"
                 }
             ]
         }
